@@ -37,6 +37,7 @@
                     </ul>
                     @if (Context.User.Identity.IsAuthenticated)
                     {
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
                         <span>User : @Context.User.Identity.Name</span>
                     }
                 </div>
