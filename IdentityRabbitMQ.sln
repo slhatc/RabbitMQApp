@@ -5,7 +5,9 @@ VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityRabbitMQWeb", "IdentityRabbitMQWeb\IdentityRabbitMQWeb.csproj", "{D1A2223A-81BC-4BB8-8448-563CFB794CBA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{7455DC55-CB64-4025-A265-63C6F7FDF079}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{7455DC55-CB64-4025-A265-63C6F7FDF079}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerService", "WorkerService\WorkerService.csproj", "{59BAAD30-C134-4E5F-9AFB-6CAAC21B27FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{7455DC55-CB64-4025-A265-63C6F7FDF079}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7455DC55-CB64-4025-A265-63C6F7FDF079}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7455DC55-CB64-4025-A265-63C6F7FDF079}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59BAAD30-C134-4E5F-9AFB-6CAAC21B27FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59BAAD30-C134-4E5F-9AFB-6CAAC21B27FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59BAAD30-C134-4E5F-9AFB-6CAAC21B27FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59BAAD30-C134-4E5F-9AFB-6CAAC21B27FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
