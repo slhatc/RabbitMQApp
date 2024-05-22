@@ -35,49 +35,53 @@ namespace WorkerService
             var consumer = new AsyncEventingBasicConsumer(_channel);
 
             _channel.BasicConsume(RabbitMQClientService.QueueName, false, consumer);
-
             consumer.Received += Consumer_Received;
-
             return Task.CompletedTask;
         }
 
         private async Task Consumer_Received(object sender, BasicDeliverEventArgs @event)
         {
-            await Task.Delay(5000);
-
-
-            var createExcelMessage = JsonSerializer.Deserialize<CreateExcelMessage>(Encoding.UTF8.GetString(@event.Body.ToArray()));
-
-
-            using var ms = new MemoryStream();
-
-
-            var wb = new XLWorkbook();
-            var ds = new DataSet();
-            ds.Tables.Add(GetTable("products"));
-            ;
-
-            wb.Worksheets.Add(ds);
-            wb.SaveAs(ms);
-
-            MultipartFormDataContent multipartFormDataContent = new();
-
-            multipartFormDataContent.Add(new ByteArrayContent(ms.ToArray()), "file", Guid.NewGuid().ToString() + ".xlsx");
-
-            var baseUrl = "https://localhost:44321/api/files";
-
-            using (var httpClient = new HttpClient())
+            try
             {
+                var createExcelMessage = JsonSerializer.Deserialize<CreateExcelMessage>(Encoding.UTF8.GetString(@event.Body.ToArray()));
 
-                var response = await httpClient.PostAsync($"{baseUrl}?fileId={createExcelMessage.FileId}", multipartFormDataContent);
 
-                if (response.IsSuccessStatusCode)
+                using var ms = new MemoryStream();
+
+
+                var wb = new XLWorkbook();
+                var ds = new DataSet();
+                ds.Tables.Add(GetTable("products"));
+                ;
+
+                wb.Worksheets.Add(ds);
+                wb.SaveAs(ms);
+
+                MultipartFormDataContent multipartFormDataContent = new();
+
+                multipartFormDataContent.Add(new ByteArrayContent(ms.ToArray()), "file", Guid.NewGuid().ToString() + ".xlsx");
+                var baseUrl = "https://localhost:7081/api/files";
+                using (var httpClient = new HttpClient())
                 {
 
-                    _logger.LogInformation($"File ( Id : {createExcelMessage.FileId}) was created by successful");
-                    _channel.BasicAck(@event.DeliveryTag, false);
+                    var response = await httpClient.PostAsync($"{baseUrl}?fileId={createExcelMessage.FileId}", multipartFormDataContent);
+                    if (response.IsSuccessStatusCode)
+                    {
+
+                        _logger.LogInformation($"File ( Id : {createExcelMessage.FileId}) was created by successful");
+                        _channel.BasicAck(@event.DeliveryTag, false);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error processing RabbitMQ message.");
+                
+            }
+            
+
+
+            
 
         }
 

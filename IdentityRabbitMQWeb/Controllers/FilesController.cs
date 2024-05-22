@@ -15,6 +15,7 @@ namespace IdentityRabbitMQWeb.Controllers
         {
             _appDbContext = appDbContext;
         }
+
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile file,int fileId)
         {
