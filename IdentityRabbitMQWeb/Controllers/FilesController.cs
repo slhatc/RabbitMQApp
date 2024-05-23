@@ -1,6 +1,8 @@
 ﻿using IdentityRabbitMQWeb.Data;
+using IdentityRabbitMQWeb.Hubs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace IdentityRabbitMQWeb.Controllers
@@ -10,10 +12,11 @@ namespace IdentityRabbitMQWeb.Controllers
     public class FilesController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
-
-        public FilesController(AppDbContext appDbContext)
+        private readonly IHubContext<MyHub> _hubContext;
+        public FilesController(AppDbContext appDbContext, IHubContext<MyHub> hubContext = null)
         {
             _appDbContext = appDbContext;
+            _hubContext = hubContext;
         }
 
         [HttpPost]
@@ -33,7 +36,7 @@ namespace IdentityRabbitMQWeb.Controllers
             userFile.FilePath = filePath;
             userFile.FileStatus = Models.FileStatus.Competed;
             await _appDbContext.SaveChangesAsync();
-
+            await _hubContext.Clients.User(userFile.UserId).SendAsync("CompletedFile");
             return Ok();
         }
     }
